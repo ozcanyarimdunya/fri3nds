@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <style>
+        body {
+            padding: 40px;
+            border: 1px solid forestgreen;
+            border-radius: 10px;
+        }
+
+        a, p {
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+<a href="#">Start</a>
+<p id="statusArea"></p>
+<script>
+    let interval;
+    $("a").click((e) => {
+        e.preventDefault();
+
+        fetch('/start/')
+            .then(response => response.json())
+            .then(data => {
+                let result = data.data.result;
+                let taskId = data.data.taskId;
+
+                $("#statusArea").html(result);
+
+                interval = setInterval(() => getStatus(taskId), 1000)
+            })
+            .catch(err => alert(err));
+
+
+    });
+
+    let getStatus = (taskId) => {
+        let form = new FormData();
+        form.append('taskId', taskId);
+
+        fetch('/status/', {
+            method: 'post',
+            body: form
+        }).then(response => response.json())
+            .then(data => {
+                let result = data.data.result;
+                let state = data.data.state;
+
+                if (state === "SUCCESS") {
+                    clearInterval(interval);
+                }
+
+                $("#statusArea").html(`${result.current} / ${result.total} <br> ${result.percent} %`);
+            })
+            .catch(err => alert(err));
+    }
+</script>
+</body>
+</html>
