@@ -11,21 +11,30 @@
             border-radius: 10px;
         }
 
-        a, p {
+        form, p {
             margin: 10px;
         }
     </style>
 </head>
 <body>
-<a href="#">Start</a>
+<form action="#" method="post">
+    <label for="constValue">Const: value</label>
+    <input type="text" id="constValue">
+    <input type="submit" value="Start">
+</form>
 <p id="statusArea"></p>
 <script>
     let interval;
-    $("a").click((e) => {
+    $('form').submit((e) => {
         e.preventDefault();
 
-        fetch('/start/')
-            .then(response => response.json())
+        let form = new FormData();
+        form.append('constValue', $('#constValue').value);
+
+        fetch('/start/', {
+            method: 'post',
+            body: form
+        }).then(response => response.json())
             .then(data => {
                 let result = data.data.result;
                 let taskId = data.data.taskId;
@@ -35,8 +44,6 @@
                 interval = setInterval(() => getStatus(taskId), 1000)
             })
             .catch(err => alert(err));
-
-
     });
 
     let getStatus = (taskId) => {

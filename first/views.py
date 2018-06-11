@@ -11,8 +11,12 @@ def index(request):
     return render(request, 'index.html')
 
 
+@csrf_exempt
 def start(request):
-    const = 81
+    const = request.POST['constValue']
+    if const is None:
+        return JsonResponse({'data': None})
+
     taskId = simple_task.delay(const)
     data = {
         "result": "Task started",
