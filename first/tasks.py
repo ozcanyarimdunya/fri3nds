@@ -5,6 +5,7 @@ from celery import shared_task, current_task
 
 @shared_task
 def simple_task(total):
+    total = int(total)
     for num in range(total):
         sleep(0.2)
         percent = (float(num) / total) * 100

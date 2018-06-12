@@ -18,8 +18,9 @@
 </head>
 <body>
 <form action="#" method="post">
+    {% csrf_token %}
     <label for="constValue">Const: value</label>
-    <input type="text" id="constValue">
+    <input type="text" id="constValue" value="114">
     <input type="submit" value="Start">
 </form>
 <p id="statusArea"></p>
@@ -28,8 +29,9 @@
     $('form').submit((e) => {
         e.preventDefault();
 
+        let constValue = $('#constValue')[0].value;
         let form = new FormData();
-        form.append('constValue', $('#constValue').value);
+        form.append('constValue', constValue);
 
         fetch('/start/', {
             method: 'post',
