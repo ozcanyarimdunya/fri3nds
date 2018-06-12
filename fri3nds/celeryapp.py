@@ -4,7 +4,9 @@ from celery import Celery
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fri3nds.settings')
 
-app = Celery('fri3nds')
+url = "redis://redis:6379"
+
+app = Celery('fri3nds', broker=url, backend=url)
 app.config_from_object('django.conf:settings')
 app.autodiscover_tasks()
 

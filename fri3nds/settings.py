@@ -114,9 +114,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# Celery configurations
-CELERY_BROKER_URL = 'amqp://localhost:5672///'
-CELERY_RESULT_BACKEND = 'amqp://localhost:5672//'
-CELERY_ACCEPT_CONTENT = ['json']
+# Celery and Redis configurations
+
+# #CELERY_BROKER_URL = 'redis://0.0.0.0:6379'
+# #CELERY_RESULT_BACKEND = 'redis://0.0.0.0:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE
