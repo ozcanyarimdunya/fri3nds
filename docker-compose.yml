@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  redis:
+    image: redis
+    restart: on-failure
+    ports: # remove in production
+      - '6379:6379'
+
+  django:
+    build: .
+    restart: always
+    command: sh run-server.sh
+    volumes:
+      - .:/code
+    links:
+      - redis
+    ports: # remove in production
+      - '8000:8000'
+
+  celery:
+    build: .
+    restart: on-failure
+    command: sh run-celery.sh
+    links:
+      - redis
